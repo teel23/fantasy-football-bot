@@ -1,15 +1,48 @@
 # FF Bot — Product Status
-**As of:** March 6, 2026 (Session 15 — first real end-to-end user test)
+**As of:** March 16, 2026 (Session 28 — Competitive UX Redesign Sprints 1–4)
 **What it is:** AI-powered fantasy football assistant — works with any Sleeper league. Claude analyzes your roster, waiver wire, trades, and matchup every week.
 
 **Live URLs:**
 - Frontend: https://ff-bot-web.vercel.app
-- Backend: https://web-production-dddf8.up.railway.app (v1.7.0)
+- Backend: https://web-production-dddf8.up.railway.app
 - API Docs: https://web-production-dddf8.up.railway.app/docs
 
 ---
 
-## Overall Progress: ~75% usable (code complete, data/off-season gaps remain)
+## Overall Progress: ~92% complete (re-assessed March 16, 2026)
+
+### Session 28 — UX Redesign Complete ✅
+The frontend now has feature-parity with FantasyPros/Sleeper/ESPN/4for4 visual patterns:
+- **Tier dividers** in all ranked lists (FantasyPros pattern)
+- **Inline stat chips** on every player row (4for4 pattern)
+- **Floor-ceiling range bars** in Lineup (ESPN pattern)
+- **Day-of-week action bar** on Home (ESPN/Sleeper)
+- **Collapsed `<details>` reasoning** on all AI pages
+- **SVG radar chart** in War Room
+- **DV Balance Meter** in Trade
+- **Pick timeline grid** in Dynasty Capital
+- **Composite bar viz** in Power Rankings
+- **Sparkline bar chart** in Schedule
+- **Context strip** (team + week) in top bar on all pages
+- **POS_COLOR centralized** — single source of truth in `lib/constants.ts`
+
+---
+
+## Overall Progress: ~35% usable (re-assessed March 10, 2026)
+> ⚠️ Previous 75% estimate was based on file existence, not functional completeness. See `AUDIT_REPORT.md` for full breakdown. See `MASTER_TODO.md` for all open work.
+
+### New features added to roadmap (Session 16)
+- Year-round dynasty support (off-season hub, dynasty capital, trade market, calendar)
+- Prior year draft analysis + historical grade view
+- Boom/bust profiles by position (QB/RB/WR/TE each have different key metrics)
+- League settings-aware rankings (PPR vs Half-PPR shifts values, SF shifts QB value)
+- In-season live stats pipeline (Sleeper for live scoring, nflverse for post-game analysis)
+- Live draft agent improvements (real-time board, dynasty vs redraft mode, auction support)
+- Notifications system fix (spam, automation, role change alerts, trade offer detection)
+- Login flow full audit and fix
+- Drop suggestions engine (AI-driven, dynasty-context-aware)
+- Shared agent context object (structured payload for all Claude calls)
+- Roster display logic (starter/bench/taxi/IR groupings, dynasty value inline)
 
 ---
 
@@ -48,19 +81,22 @@
 ### Dashboard Pages
 | Page | Status | Notes |
 |---|---|---|
-| **Home** | ✅ Done | Card grid: matchup, injury report, position depth (color coded), waiver alerts, league news, quick actions, Claude briefing |
-| **Roster** | ✅ Done | Fast raw DB load (no auto-AI), position groups, click → PlayerProfileDrawer, Lineup Optimizer link |
-| **Lineup Optimizer** | ✅ Done | Start/sit recommendations with confidence scores, Claude reasoning per player |
-| **Waiver Wire** | ✅ Done | Role change alerts, FAAB budget, position filter, collapsible waiver priority order panel, Claude reasoning |
-| **Trade Analyzer** | ✅ Done | Mode A: specific trade (ACCEPT/DECLINE/NEUTRAL + reasoning). Mode B: league scan → top 3 partner cards. "Start Trade →" pre-fills Mode A from scan results |
-| **GM War Room** | ✅ Done | Scout report + A-F grades + action items + CSS Gantt chart + Playoff Push tab + Rebuild vs Contend verdict |
-| **League** | ✅ Done | Live Sleeper standings, power rankings table (roster strength + form), sync button |
-| **Player Profile** | ✅ Done | Full drawer: bio, injury, boom/bust tier badge, projection, recent stats, opportunity trend. Clickable from Roster, Waiver, Trade, Home (injuries) |
-| **Notifications** | ✅ Done | Notification bell in top bar with badge count; dropdown panel; injury + role change alerts |
-| **Rookie Draft Prep** | ✅ Done | Dynasty off-season — incoming class with dynasty tier (Elite→Flier), position filter tabs, click → PlayerProfileDrawer |
-| **Draft** | ✅ Done | Live board (5s polling), AI Pick Assistant panel, pick-by-pick grading vs ADP (A-F), Grade Draft slide-out, my-picks highlighted |
-| **Keepers** | ✅ Done | Dynasty: value-based roster optimizer. Keeper leagues: enter round cost per player → AI KEEP/TRADE/CUT verdict |
-| **Settings (Leagues)** | ✅ Done | Connect leagues, view auto-imported settings, manual re-sync |
+| **Home** | ✅ Done | Card grid + ActionBar (day-of-week nudge), position depth mini bars with POS_COLOR, matchup, injury report, waiver alerts, Claude briefing |
+| **Roster** | ✅ Done | HealthStrip, position-grouped with TierDividers, DV + age chips, SlotBadge, BOOM_BUST_BORDER left border, PlayerProfileDrawer |
+| **Lineup Optimizer** | ✅ Done | Floor-ceiling RangeBar, tier-grouped list (5 tiers) with TierDividers, optimal lineup strip, collapsed `<details>` reasoning |
+| **Waiver Wire** | ✅ Done | Sort modes (rank/proj/opp/role), PlayerInlineRow with color-coded Opp chip, FAAB banner, collapsed reasoning, inline drop suggestion |
+| **Trade Analyzer** | ✅ Done | DV Balance Meter (all-roster fetch), upgraded verdict card (large centered verdict + trajectory line), Mode B league scan |
+| **GM War Room** | ✅ Done | SVG radar chart (5-axis: Age/Upside/Pick Capital/Floor/Depth), Gantt timeline, Playoff Push tab, Rebuild vs Contend verdict |
+| **League** | ✅ Done | Standings with +/- column, Power Rankings composite bar viz, Rosters tab (all 12 teams) |
+| **Schedule** | ✅ Done | Playoff seeding banner, sparkline bar chart header, PF/PA/+/- columns, backend-proxied Sleeper calls |
+| **Dynasty Capital** | ✅ Done | Capital Balance bar, Pick Timeline grid (seasons × rounds), Net Capital Score bar, AI analysis |
+| **Player Profile** | ✅ Done | Full drawer: bio, injury, boom/bust tier badge, projection, recent stats, opportunity trend |
+| **Notifications** | ✅ Done | Bell in top bar with badge; dropdown; injury + role change alerts |
+| **Rookie Draft Prep** | ✅ Done | Dynasty off-season — incoming class, dynasty tier (Elite→Flier), position filter, PlayerProfileDrawer |
+| **Draft** | ✅ Done | Live board (5s polling), AI Pick Assistant, pick grading vs ADP (A-F), Grade Draft slide-out |
+| **Keepers** | ✅ Done | Dynasty: value-based optimizer. Keeper: round cost vs value → KEEP/TRADE/CUT |
+| **Settings (Leagues)** | ✅ Done | Connect leagues, auto-imported settings, manual re-sync |
+| **AI Agent** | ✅ Done | 11-source real data context, inline markdown, localStorage history, 4 quick chips |
 
 ---
 

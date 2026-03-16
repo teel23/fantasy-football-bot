@@ -1,7 +1,108 @@
 # FF Bot — Session Notes
-**Last updated:** March 6, 2026 (Session 15)
-**Project folder:** `~/Desktop/AI/FF Bot/ff-bot`
-**GitHub repo:** https://github.com/teel23/ff-bot (private)
+**Last updated:** March 16, 2026 (Session 28 — Competitive UX Redesign, Sprints 1–4)
+**Project folder:** `/COMPUTER/AI/Projects/fantasy-football-bot/`
+**GitHub repos:**
+- Backend: https://github.com/teel23/ff-bot (private) → Railway
+- Frontend: https://github.com/teel23/ff-bot-web (private) → Vercel
+
+---
+
+## ✅ Session 28 — Competitive UX Redesign (March 16, 2026)
+
+**Goal:** Make every page competitive with FantasyPros, Sleeper, ESPN, and 4for4. No new npm packages — pure Tailwind + CSS/SVG. All 4 sprints completed in one session.
+
+### What Changed
+
+**Sprint 1 — Shared primitives (new files):**
+- `lib/constants.ts` — POS_COLOR, GRADE_COLOR, BOOM_BUST_BORDER
+- `components/StatChip.tsx` — inline stat chip (label + value)
+- `components/TierDivider.tsx` — edge-to-edge tier separator
+- `components/PlayerInlineRow.tsx` — universal dense player row with chips, injury dot, left border color
+- `app/globals.css` — `--surface3`, `--tier-divider`, `--green-dim`, `--yellow-dim`, `--red-dim`
+
+**Sprint 2 — Waiver + Lineup rewrites:**
+- Waiver: sort modes, PlayerInlineRow, FAAB banner, `<details>` reasoning, inline drop suggestion
+- Lineup: RangeBar floor-ceiling, 5-tier grouped list with TierDividers, optimal lineup strip
+
+**Sprint 3 — All remaining pages:**
+- Roster: HealthStrip, position groups, DV + age chips, BOOM_BUST_BORDER left border
+- Schedule: seeding banner, sparkline bar chart, PF/PA/+/- columns
+- Trade: DV Balance Meter (all-roster DV fetch), large centered verdict card
+- War Room: SVG radar chart (5-axis pentagon, grid rings, data polygon)
+- Dynasty Capital: Capital Balance bar, Pick Timeline grid
+- League: Power Rankings composite bar, Standings +/- column
+
+**Sprint 4 — Layout polish + POS_COLOR consolidation:**
+- `layout.tsx`: top bar context strip (team name + `Wk N` pill), conditional Lineup tab in mobile bottom nav (season) vs Menu (offseason)
+- Removed 5 local `const POS_COLOR` definitions across war-room, rookie-draft, keepers, trade, draft — all import from `lib/constants.ts`
+
+**Build:** TypeScript clean, 23 pages generated, 0 errors.
+**Commit:** `806889b` — pushed to `ff-bot-web` main → Vercel auto-deploys.
+
+---
+
+## 🔄 Next Session — Resume Here
+
+### Current State (Session 28 complete — March 16, 2026)
+- **Frontend**: All 4 UX sprints complete. Pushed to Vercel. Build clean.
+- **Backend**: All Session 27 bug fixes deployed on Railway (pending push from Session 27 notes).
+- **ff-bot**: Session 27 changes (10 bug fixes) may still need push — check `ff-bot` submodule git status.
+
+### Pending — Manual Action Required
+- [ ] **Run `supabase/005_advanced_metrics.sql` in Supabase SQL Editor** — adds `racr`, `wopr`, `air_yards`, `epa` cols + indexes. Safe to re-run.
+- [ ] **Add GitHub Secrets** (`SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `ODDS_API_KEY`, `OPENWEATHER_API_KEY`) — needed for GitHub Actions ingestion workflows
+
+### Open UX Work (Post-Sprint-4)
+- [ ] Mobile UX audit pass — 390px viewport, check overflow/truncation on redesigned pages
+- [ ] Tier filter pills on Lineup page — filter to show only "Toss-Up" tier
+- [ ] Player comparison tool — `/dashboard/compare`, side-by-side composite + DV + projections
+- [ ] Notifications page polish — mark-all-read, empty state illustration
+
+---
+
+## 🔍 Session 16 — Full Codebase Audit (March 10, 2026)
+
+### Verdict: ~35% Complete (Not 75%)
+
+The PRODUCT_STATUS.md claimed 75% complete. After reading every engine file, all 18 frontend pages, and the DB schema, that number is wrong. The infrastructure is solid but the user-facing product is essentially non-functional right now. See `AUDIT_REPORT.md` for the full breakdown.
+
+### Core Findings
+
+**What's genuinely done:**
+- Supabase schema, RLS, auth — solid
+- FastAPI backend structure and all engine files exist with real logic
+- Frontend pages exist with clean code and consistent dark UI
+- Sleeper connect + auto-import works
+- AI Chat (floating panel) works
+- League Standings (live Sleeper API) works
+
+**What's broken or hollow:**
+- Every page is blank right now — off-season, no live data
+- **War Room is fundamentally fake** — Claude is given only the league name/type and asked to hallucinate grades. No actual roster data is passed in. This needs to be rebuilt.
+- Lineup/Waiver/Trade engines are coded correctly but have no current data to work with (projections are 2025 Week 1 seed data, it's now March 2026)
+- `league_rosters` table needs a successful sync before most features do anything
+- Data pipeline (weekly ingestion, projections, role change detection) is not running automatically
+- Self-learning loop is inert — no actual vs projected data to train on
+- Player profiles show 2022–2024 stats only, no 2025 data exists yet
+
+### Session 16 Next Priorities (Full Rewrite — March 10, 2026)
+
+See `MASTER_TODO.md` for the canonical prioritized task list going forward. The below is the session-level summary.
+
+**Immediate unblocks (nothing else matters until these are done):**
+1. Fix league sync — get `league_rosters` populated for Chimp Dynasty
+2. Rebuild War Room with actual roster data passed to Claude
+3. Build off-season dynasty home (dynasty capital, age profile, draft prep, trade targets)
+
+**Next sprint — make the product real:**
+4. Year-round dynasty support — content + tools for all 12 months
+5. Draft analysis feature — prior year draft grades + boom/bust profiles by position
+6. Verify in-season live stats pipeline — Sleeper live scoring + nflverse timing
+7. Login flow audit — fix all known glitchy auth states
+8. Roster display logic — smart groupings, starter/bench/taxi/IR, dynasty-aware
+9. Drop suggestions engine — AI-driven drop candidates based on dynasty context
+10. Live draft agent — real-time picks, AI recommendations, rankings during draft
+11. Notifications system — injury alerts, role changes, waiver deadlines (working, fix spam)
 
 ---
 
