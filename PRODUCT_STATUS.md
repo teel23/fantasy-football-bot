@@ -9,7 +9,10 @@
 
 ---
 
-## Overall Progress: ~92% complete (re-assessed March 16, 2026)
+## Overall Progress: ~90% built · ~80% usable (re-assessed June 24, 2026)
+> **Two dimensions, one status:** "built" = features implemented; "usable" = works end-to-end without known blocking bugs.
+> The June 2026 audit verified that every CRITICAL/MAJOR item in `ff-bot/BROKEN_FEATURES.md` (C1–C3, M1–M3) is **now resolved** in code — the event-loop-blocking Claude calls are wrapped in executors, the matchup pillar is populated by `ingestion/matchup.py`, and the week-number bugs accept a client-passed `week`. The older "35% usable" note below predates those fixes and is kept only for history.
+> Remaining open items are MINOR: `m1` (schedule page makes 19 direct Sleeper calls — needs a cached backend proxy) and `m2` (email reminder task module not implemented).
 
 ### Session 28 — UX Redesign Complete ✅
 The frontend now has feature-parity with FantasyPros/Sleeper/ESPN/4for4 visual patterns:
@@ -28,8 +31,9 @@ The frontend now has feature-parity with FantasyPros/Sleeper/ESPN/4for4 visual p
 
 ---
 
-## Overall Progress: ~35% usable (re-assessed March 10, 2026)
-> ⚠️ Previous 75% estimate was based on file existence, not functional completeness. See `AUDIT_REPORT.md` for full breakdown. See `MASTER_TODO.md` for all open work.
+## [HISTORICAL — superseded] March 10, 2026 assessment: ~35% usable
+> ⚠️ Kept for history only. This snapshot predates the S29–S40 bug fixes (matchup pillar, async Claude calls, week-number handling) and no longer reflects the current state. See the reconciled status at the top of this file.
+> Original note: Previous 75% estimate was based on file existence, not functional completeness.
 
 ### New features added to roadmap (Session 16)
 - Year-round dynasty support (off-season hub, dynasty capital, trade market, calendar)
